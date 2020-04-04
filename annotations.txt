@@ -1,0 +1,39 @@
+TESTING CONTAINERS COMMUNICATION IN NETWORKS
+
+BRIDGE
+
+docker container run -d --name container1 alpine sleep 1000
+docker container run -d --name container2 alpine sleep 1000
+
+// to check it's ip
+docker container exec container1 ifconfig
+docker container exec container2 ifconfig
+
+
+// create a network
+docker network create skynet
+
+// connect a container to a net
+docker network connect net container
+
+// for testing, disconnect container1 from bridge, this way containers cant communicate anymore
+
+docker network disconnect bridge container1
+
+docker container exec container2 ping container1IP //will not work
+
+
+docker network connect skynet container1
+docker network connect skynet container2
+
+docker container exec container2 ping container1IP //will work
+
+
+---------------------------------
+
+HOST
+
+exatamente do mesmo jeito, porém o container terá acesso as mesmas redes que o host (máquina hospedeira)
+
+recomendável somente em casos em que se precise de mais performance,
+visto que o container irá ganhar mais desempenho
