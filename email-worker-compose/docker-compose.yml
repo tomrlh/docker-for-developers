@@ -1,0 +1,27 @@
+version: '3'
+
+volumes:
+  data:
+services:
+  db:
+    image: postgres:9.6
+    environment: 
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=db
+    volumes:
+      # Data volume
+      - data:/var/lib/postgresql/data
+      # Scripts
+      - ./scripts:/scripts
+      - ./scripts/init.sql:/docker-entrypoint-initdb.d/init.sql
+  
+  
+  
+  frontend:
+    image: nginx:1.13
+    volumes:
+      # Site
+      - ./web:/usr/share/nginx/html/
+    ports:
+      - 80:80
